@@ -1,4 +1,4 @@
-import { services as samples, faqs as sampleFaqs, normalizeServices } from './data.js?v=20261021-standee';
+import { services as samples, faqs as sampleFaqs, normalizeServices } from './data.js?v=20261021-banner-image';
 import { initQuote, initUpload, initContact } from './quote-form.js';
 const $ = (s) => document.querySelector(s);
 const page = document.body.dataset.page;

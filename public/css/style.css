@@ -100,3 +100,6 @@ label{font-size:14px}
 @media(min-width:801px) and (max-width:1100px){.hero.hero-bright{gap:24px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.hero-services{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.hero-bright h1{font-size:38px}.hero-bright .actions{gap:10px}.hero-bright .btn{font-size:13px}}
 @media(max-width:800px){.hero.hero-bright{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:0 5% 38px;min-height:0}.hero-bright .wrap{padding:36px 0 26px}.hero-bright h1{font-size:clamp(36px,6vw,48px)}.hero-product-image{width:100%;height:auto;max-height:none;align-self:center}.hero-bright .hero-note{left:5%;right:5%;bottom:8px;text-align:center;font-size:9px}}
 @media(max-width:500px){.hero-bright h1{font-size:36px}.hero-bright .eyebrow{font-size:9px;letter-spacing:1px}.hero-bright .hero-note{font-size:8px}.hero-service{font-size:11px}}
+/* Use the supplied banner composition without the atlas thumbnail zoom. */
+.card .product-art:not([data-product]) img{transform:none;object-position:center;object-fit:contain}
+.detail-image[src="/assets/banner-flex.png"]{height:auto;aspect-ratio:1}
