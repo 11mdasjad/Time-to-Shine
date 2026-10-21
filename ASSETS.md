@@ -1,5 +1,11 @@
 # Generated assets
 
+## public/assets/aadhaar-printing.png
+
+Created with the built-in imagegen tool for the Aadhaar Card Printing Services card. Illustrative sample only, with masked numbers and no personal information or official endorsement.
+
+Prompt: Create a professional website service thumbnail for Aadhaar document printing in India, landscape 1536x1024. Clean bright pale blue studio desktop, a compact white document printer in background and a neatly arranged paper document with two small laminated sample identity-format cards in foreground. Use subtle saffron and green bands to suggest Indian document printing. Cards must be visibly illustrative and nonfunctional: a generic grey person silhouette instead of a real face, placeholder number shown only as 'XXXX XXXX XXXX', no scannable QR code, no barcode, no government seal, no official logo. Prominent readable navy text on the foreground sample card: 'AADHAAR PRINT' and smaller 'SAMPLE'. Restrained modern product photography, realistic paper texture, crisp professional lighting. No actual personal data, no claims of government authorization, no contact details, no watermark. The subject group is centered with enough space for a wide thumbnail crop. This image is an illustrative sample for a printing service, not an identity document.
+
 ## public/assets/hero-charcoal-studio.png
 
 Edited from hero-black-studio.png with the built-in imagegen tool to lift shadow detail and use a softly lit charcoal backdrop. The hero now displays the complete product image in a separate column without a dark overlay.

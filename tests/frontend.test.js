@@ -7,7 +7,7 @@ const catalogue={services,faqs,portfolio:[],settings:{}};
 let version=0;
 async function render(file,query=''){const dom=new JSDOM(await readFile('public/'+file,'utf8'),{url:'http://localhost:4173/'+file+query,pretendToBeVisual:true});Object.assign(globalThis,{window:dom.window,document:dom.window.document,location:dom.window.location,FormData:dom.window.FormData,matchMedia:()=>({matches:false}),fetch:async()=>({ok:true,json:async()=>catalogue})});await import(`../public/js/main.js?test=${version++}`);return dom;}
 test('all public pages render meaningful content and internal links resolve',async()=>{const files=(await readdir('public')).filter(f=>f.endsWith('.html')&&f!=='admin.html');for(const file of files){const dom=await render(file);assert.ok(document.querySelector('main h1'),file+' has heading');assert.ok(document.querySelector('main').textContent.length>100,file+' has content');for(const link of document.querySelectorAll('a[href]')){const url=new URL(link.href);if(url.origin===location.origin&&url.pathname.endsWith('.html'))assert.ok(files.includes(url.pathname.slice(1))||url.pathname==='/admin.html',url.pathname);}dom.window.close();}});
-test('catalogue combines category/search and renders empty state',async()=>{const dom=await render('services.html');assert.equal(document.querySelectorAll('#catalogue .card').length,8);document.querySelector('[data-category="Apparel"]').click();assert.equal(document.querySelectorAll('#catalogue .card').length,2);const input=document.querySelector('#service-search');input.value='dtf';input.dispatchEvent(new dom.window.Event('input'));assert.equal(document.querySelectorAll('#catalogue .card').length,1);input.value='unmatched';input.dispatchEvent(new dom.window.Event('input'));assert.equal(document.querySelectorAll('#catalogue .card').length,0);assert.match(document.querySelector('#catalogue').textContent,/No matching/);dom.window.close();});
+test('catalogue combines category/search and renders empty state',async()=>{const dom=await render('services.html');assert.equal(document.querySelectorAll('#catalogue .card').length,9);document.querySelector('[data-category="Apparel"]').click();assert.equal(document.querySelectorAll('#catalogue .card').length,2);const input=document.querySelector('#service-search');input.value='dtf';input.dispatchEvent(new dom.window.Event('input'));assert.equal(document.querySelectorAll('#catalogue .card').length,1);input.value='unmatched';input.dispatchEvent(new dom.window.Event('input'));assert.equal(document.querySelectorAll('#catalogue .card').length,0);assert.match(document.querySelector('#catalogue').textContent,/No matching/);dom.window.close();});
 test('simple quote validates before opening WhatsApp with formatted details',async()=>{
   const dom=await render('get-a-quote.html','?service=dtf');
   const form=document.querySelector('#quote-root form');const opened=[];window.open=(...args)=>opened.push(args);
@@ -52,10 +52,10 @@ test('old API service names upgrade to Standee and Custom Label on cards and enq
   const {additionalServices}=await import('../public/js/service-options.js');
   assert.equal(additionalServices.length,60);assert.equal(new Set(additionalServices.map(s=>s.id)).size,60);
   let dom=await render('services.html');
-  assert.equal(document.querySelectorAll('#catalogue .card').length,8);
+  assert.equal(document.querySelectorAll('#catalogue .card').length,9);
   assert.equal(document.querySelectorAll('.service-enquiry-panel').length,1);
   const picker=document.querySelector('#enquiry-service');
-  for(const service of additionalServices)assert.ok([...picker.options].some(o=>o.value===service.id));
+  for(const service of additionalServices)assert.ok([...picker.options].some(o=>o.textContent===service.name));
   const chosen=additionalServices.find(s=>s.name==='LED Sign Board Repair & Services');
   picker.value=chosen.id;picker.dispatchEvent(new dom.window.Event('change'));
   const link=new URL(document.querySelector('#enquiry-contact').href);assert.equal(link.pathname,'/contact.html');assert.equal(link.searchParams.get('service'),chosen.id);dom.window.close();
@@ -65,4 +65,9 @@ test('old API service names upgrade to Standee and Custom Label on cards and enq
   form.dispatchEvent(new dom.window.Event('submit',{bubbles:true,cancelable:true}));
   assert.ok(new URL(opened).searchParams.get('text').includes('Service: '+chosen.name));dom.window.close();
   dom=await render('get-a-quote.html','?service='+chosen.id);assert.equal(document.querySelector('select[name=service]').value,chosen.id);dom.window.close();
+});
+
+test('Aadhaar card remains present with older catalogue and prefills enquiries',async()=>{
+ const old=catalogue.services;catalogue.services=old.filter(s=>s.id!=='aadhaar');
+ try{let dom=await render('services.html');const card=[...document.querySelectorAll('#catalogue .card')].find(el=>el.querySelector('h3').textContent==='Aadhaar Card Printing Services');assert.ok(card);assert.equal(card.querySelector('img').getAttribute('src'),'/assets/aadhaar-printing.png');dom.window.close();dom=await render('get-a-quote.html','?service=aadhaar');const options=[...document.querySelector('select[name=service]').options];assert.equal(options.filter(o=>o.textContent==='Aadhaar Card Printing Services').length,1);assert.equal(document.querySelector('select[name=service]').value,'aadhaar');dom.window.close();}finally{catalogue.services=old;}
 });

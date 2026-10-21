@@ -76,4 +76,4 @@ One file per request, 10 MB maximum. PNG/JPEG/PDF extension and binary signature
 
 ## Additional enquiry services
 
-The 60 owner-supplied category names live in `public/js/service-options.js`. They appear in one compact picker on Services and in the Contact and Quote dropdowns, without creating extra service cards. Services-to-Contact links preselect the category; both WhatsApp message formats include the selected service. These enquiry choices are independent of the eight detailed catalogue cards.
+The 60 owner-supplied category names live in `public/js/service-options.js`. They appear in one compact picker on Services and in the Contact and Quote dropdowns, without creating extra service cards. Services-to-Contact links preselect the category; both WhatsApp message formats include the selected service. These enquiry choices are independent of the nine detailed catalogue cards.

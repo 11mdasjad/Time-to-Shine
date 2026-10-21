@@ -1,4 +1,4 @@
-import {enquiryServices,serviceOptionsMarkup} from './service-options.js';
+import {enquiryServices,serviceOptionsMarkup} from './service-options.js?v=20261021-aadhaar';
 import {buildEnquiryMessage,whatsappUrl} from './whatsapp.js?v=20261021-service-options';
 import {mountUpload,postMultipart} from './file-upload.js';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

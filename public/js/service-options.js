@@ -51,7 +51,7 @@ export const additionalServices = [
   'Board Printing Services',
   'Sunboard Printing Services',
   'Sublimation Printing Services',
-  'Aadhar Card Printing Services',
+  'Aadhaar Card Printing Services',
   'ID Card Printing Services',
   'Vinyl Sticker Printing Services',
   'Digital Printing Press Wholesalers',
