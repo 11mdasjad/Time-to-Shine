@@ -19,6 +19,7 @@ export function buildEnquiryMessage(data, kind = 'contact') {
     if (clean(data.message)) lines.push('', '*Additional Details*', clean(data.message));
     lines.push('', 'Please confirm availability and share a quotation for my requirements.');
   } else {
+    if (clean(data.serviceName)) lines.push('', '*Selected Service*', `Service: ${line(data.serviceName)}`);
     lines.push('', '*Message*', clean(data.message), '', 'Please help me with this enquiry.');
   }
   lines.push('', 'Thank you!');

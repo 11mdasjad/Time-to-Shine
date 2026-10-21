@@ -1,4 +1,5 @@
-import {buildEnquiryMessage,whatsappUrl} from './whatsapp.js';
+import {enquiryServices,serviceOptionsMarkup} from './service-options.js';
+import {buildEnquiryMessage,whatsappUrl} from './whatsapp.js?v=20261021-service-options';
 import {mountUpload,postMultipart} from './file-upload.js';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const input=(name,label,type='text',required=true)=>`<label>${label}${required?' *':''}<input name="${name}" type="${type}" ${required?'required':''} ${type==='number'?'min="1" max="10000000" step="1"':''} ${type==='tel'?'pattern="[+0-9 ()-]{7,25}"':''} maxlength="${type==='email'?254:200}"></label>`;
@@ -7,14 +8,15 @@ const privacy='<label class="checkbox"><input name="consent" type="checkbox" req
 function status(root,result){root.replaceChildren();const box=document.createElement('div');box.className='success';const title=document.createElement('h2');title.textContent='Request received.';const p=document.createElement('p');p.textContent=`Your reference is ${result.reference}. Keep it for follow-up. Your request is saved for review; this is not an order confirmation or price quotation.`;box.append(title,p);root.append(box);box.tabIndex=-1;box.focus();}
 export function initQuote(services){mountWhatsAppForm(document.querySelector('#quote-root'),'quote',services);}
 export function initUpload(){const root=document.querySelector('#upload-root');root.innerHTML=`<form><h2>Send Your Artwork</h2><div class="fields">${customer()}</div><div id="artwork"></div><label>Project notes *<textarea name="message" required maxlength="5000" placeholder="What would you like us to print?"></textarea></label>${privacy}<p class="error" role="alert"></p><button class="btn" type="submit">Submit Artwork ↗</button></form>`;const form=root.querySelector('form'),upload=mountUpload(root.querySelector('#artwork'));form.addEventListener('submit',async e=>{e.preventDefault();const error=root.querySelector('.error:last-of-type');if(!upload.getFile()){error.textContent='Please choose an artwork file.';return;}const button=form.querySelector('[type=submit]');button.disabled=true;button.textContent='Uploading…';const body=new FormData();body.append('data',JSON.stringify(Object.fromEntries(new FormData(form))));body.append('artwork',upload.getFile());try{status(root,await postMultipart('/api/artwork',body,upload.progress));}catch(err){error.textContent=err.message;button.disabled=false;button.textContent='Retry Upload ↗';}});}
-export function initContact(){mountWhatsAppForm(document.querySelector('#contact-root'),'contact');}
+export function initContact(services=[]){mountWhatsAppForm(document.querySelector('#contact-root'),'contact',services);}
 
 function mountWhatsAppForm(root,kind,services=[]){
   const quote=kind==='quote';
+  const choices=enquiryServices(services);
   root.innerHTML=`<div class="whatsapp-intro"><span class="whatsapp-badge">Chat directly on WhatsApp</span><h2>${quote?'Tell Us What You Need':'Let’s Talk Print'}</h2><p>Fill in a few details. Your message will be ready in WhatsApp.</p></div>
   <form novalidate>
     <div class="fields">${input('name','Your name')}${input('phone','Your phone number','tel')}
-    ${quote?`<label>What would you like to print? *<select name="service" required><option value="">Choose a service</option>${services.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('')}<option value="other">Other / Help me choose</option></select></label>${input('quantity','Quantity (optional)','number',false)}`:''}
+    <label class="${quote?'':'wide'}">Which service do you need? *<select name="service" required>${serviceOptionsMarkup(services)}</select></label>${quote?input('quantity','Quantity (optional)','number',false):''}
     <label class="wide">${quote?'Tell us a little more (optional)':'Your message *'}<textarea name="message" ${quote?'':'required'} maxlength="1000" placeholder="${quote?'For example: 50 black T-shirts with a front print for our team.':'What would you like to print or ask us?'}"></textarea></label>
     </div>
     ${quote?`<details class="extra-details"><summary>Add size or email (optional)</summary><div class="fields">${input('dimensions','Size, with units','text',false)}${input('email','Email address','email',false)}</div></details>`:''}
@@ -26,7 +28,9 @@ function mountWhatsAppForm(root,kind,services=[]){
   </form>`;
   const form=root.querySelector('form');
   form.elements.name.autocomplete='name';form.elements.phone.autocomplete='tel';
-  if(quote){form.elements.email.autocomplete='email';const params=new URLSearchParams(location.search);if(services.some(s=>s.id===params.get('service')))form.elements.service.value=params.get('service');if(params.has('bulk'))form.elements.message.value='I would like a quote for bulk printing. ';}
+  const params=new URLSearchParams(location.search);
+  if(choices.some(s=>s.id===params.get('service'))||params.get('service')==='other')form.elements.service.value=params.get('service');
+  if(quote){form.elements.email.autocomplete='email';if(params.has('bulk'))form.elements.message.value='I would like a quote for bulk printing. ';}
   const handoff=root.querySelector('.whatsapp-handoff');
   form.addEventListener('input',()=>{handoff.hidden=true;handoff.querySelector('a').removeAttribute('href');root.querySelector('.error').textContent='';});
   form.addEventListener('submit',event=>{
@@ -36,7 +40,7 @@ function mountWhatsAppForm(root,kind,services=[]){
     const folded=invalid?.closest('details');if(folded)folded.open=true;
     if(!form.reportValidity()){root.querySelector('.error').textContent='Please complete the required details correctly.';return;}
     const data=Object.fromEntries(new FormData(form));
-    if(quote)data.serviceName=services.find(s=>s.id===data.service)?.name||'Other / Help me choose';
+    data.serviceName=choices.find(s=>s.id===data.service)?.name||'Other / Help me choose';
     const url=whatsappUrl(buildEnquiryMessage(data,kind));
     handoff.querySelector('a').href=url;handoff.hidden=false;
     root.querySelector('.error').textContent='';

@@ -23,13 +23,13 @@ test('simple quote validates before opening WhatsApp with formatted details',asy
   form.elements.quantity.value='51';form.elements.quantity.dispatchEvent(new dom.window.Event('input',{bubbles:true}));assert.equal(document.querySelector('.whatsapp-handoff').hidden,true);
   dom.window.close();
 });
-test('contact requires three simple fields and preserves Unicode and newlines in WhatsApp',async()=>{
+test('contact includes a service selector and preserves Unicode and newlines in WhatsApp',async()=>{
   const dom=await render('contact.html');const form=document.querySelector('#contact-root form');const opened=[];window.open=(url)=>opened.push(url);
-  assert.equal(form.querySelectorAll('input,textarea,select').length,3);
+  assert.equal(form.querySelectorAll('input,textarea,select').length,4);
   form.elements.name.value='   ';form.elements.phone.value='9999777681';form.elements.message.value='नमस्ते, printing enquiry\nCards & flyers चाहिए।';
   const submit=()=>form.dispatchEvent(new dom.window.Event('submit',{bubbles:true,cancelable:true}));submit();assert.equal(opened.length,0);
-  form.elements.name.value='Asjad';submit();assert.equal(opened.length,1);
-  const message=new URL(opened[0]).searchParams.get('text');assert.match(message,/Website Enquiry/);assert.ok(message.includes('नमस्ते, printing enquiry\nCards & flyers चाहिए।'));assert.ok(!message.includes('undefined'));
+  form.elements.name.value='Asjad';form.elements.service.value='banner';submit();assert.equal(opened.length,1);
+  const message=new URL(opened[0]).searchParams.get('text');assert.match(message,/Website Enquiry/);assert.match(message,/Service: Banner & Flex Printing/);assert.ok(message.includes('नमस्ते, printing enquiry\nCards & flyers चाहिए।'));assert.ok(!message.includes('undefined'));
   assert.equal(form.elements.name.value,'Asjad');dom.window.close();
 });
 test('mobile menu exposes state and Escape closes it',async()=>{const dom=await render('index.html');const menu=document.querySelector('.menu');menu.click();assert.equal(menu.getAttribute('aria-expanded'),'true');document.dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Escape'}));assert.equal(menu.getAttribute('aria-expanded'),'false');dom.window.close();});
@@ -46,4 +46,23 @@ test('old API service names upgrade to Standee and Custom Label on cards and enq
     assert.equal(document.querySelector('select[name=service]').selectedOptions[0].textContent,'Standee Printing');
     dom.window.close();
   }finally{catalogue.services=old;}
+});
+
+ test('additional services share one picker and prefill contact and WhatsApp without extra cards',async()=>{
+  const {additionalServices}=await import('../public/js/service-options.js');
+  assert.equal(additionalServices.length,60);assert.equal(new Set(additionalServices.map(s=>s.id)).size,60);
+  let dom=await render('services.html');
+  assert.equal(document.querySelectorAll('#catalogue .card').length,8);
+  assert.equal(document.querySelectorAll('.service-enquiry-panel').length,1);
+  const picker=document.querySelector('#enquiry-service');
+  for(const service of additionalServices)assert.ok([...picker.options].some(o=>o.value===service.id));
+  const chosen=additionalServices.find(s=>s.name==='LED Sign Board Repair & Services');
+  picker.value=chosen.id;picker.dispatchEvent(new dom.window.Event('change'));
+  const link=new URL(document.querySelector('#enquiry-contact').href);assert.equal(link.pathname,'/contact.html');assert.equal(link.searchParams.get('service'),chosen.id);dom.window.close();
+  dom=await render('contact.html',link.search);const form=document.querySelector('#contact-root form');
+  assert.equal(form.elements.service.value,chosen.id);
+  let opened;window.open=url=>{opened=url;};form.elements.name.value='Test Customer';form.elements.phone.value='9999777681';form.elements.message.value='Please share details.';
+  form.dispatchEvent(new dom.window.Event('submit',{bubbles:true,cancelable:true}));
+  assert.ok(new URL(opened).searchParams.get('text').includes('Service: '+chosen.name));dom.window.close();
+  dom=await render('get-a-quote.html','?service='+chosen.id);assert.equal(document.querySelector('select[name=service]').value,chosen.id);dom.window.close();
 });

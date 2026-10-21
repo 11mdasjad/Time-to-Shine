@@ -73,3 +73,7 @@ One file per request, 10 MB maximum. PNG/JPEG/PDF extension and binary signature
 ## Checks
 
 `npm run check` validates JavaScript syntax and HTML asset references. `npm test` covers input rules, catalogue URL constraints, file validation, real local request persistence, admin login, CSRF protection, cross-origin rejection, binary-signature rejection and authorized private downloads. Browser verification and production-specific limits are recorded in `TESTING.md`.
+
+## Additional enquiry services
+
+The 60 owner-supplied category names live in `public/js/service-options.js`. They appear in one compact picker on Services and in the Contact and Quote dropdowns, without creating extra service cards. Services-to-Contact links preselect the category; both WhatsApp message formats include the selected service. These enquiry choices are independent of the eight detailed catalogue cards.
