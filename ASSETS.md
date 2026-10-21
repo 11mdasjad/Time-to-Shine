@@ -1,5 +1,11 @@
 # Generated assets
 
+## public/assets/hero-charcoal-studio.png
+
+Edited from hero-black-studio.png with the built-in imagegen tool to lift shadow detail and use a softly lit charcoal backdrop. The hero now displays the complete product image in a separate column without a dark overlay.
+
+Prompt: Edit this exact print-products photograph for better clarity in a professional website hero. Preserve all existing objects, their arrangement, shapes and colourful print designs. Replace the pitch-black background with a softly lit charcoal-slate studio backdrop, approximately #273440 with a gentle cool grey spotlight behind the printer. Replace the black tabletop with a subtly lighter graphite surface. Lift shadows on the black T-shirt and printer so their edges, material and construction are clearly visible. Use soft neutral commercial studio lighting, preserve natural whites and saturated cyan magenta yellow print colours without overexposure. Keep the full product group visible, no cropping of products. No text, no new logos, no additional objects. Premium realistic commercial photography with restrained lighting, not neon and not flat black.
+
 ## public/assets/hero-white-studio.png
 
 Generated using the built-in imagegen tool with the user's bright white banner as a visual reference. Used in the responsive homepage hero alongside live HTML headings, navigation tiles and CTA links. An illustrative showcase, not actual premises. No logo was generated.

@@ -81,3 +81,22 @@ label{font-size:14px}
 @media(max-width:1100px){.navlinks{gap:12px;font-size:13px}.hero-bright p{font-size:16px}}
 @media(max-width:800px){.navlinks{font-size:15px}.hero-bright p{font-size:16px}}
 @media(max-width:500px){.card h3{font-size:15px}.card p{font-size:12px;min-height:78px}.hero-service{font-size:11px}.hero-bright .btn{font-size:15px}.footer a{overflow-wrap:anywhere}}
+/* Clearer hero: soft charcoal backdrop and separate text/product columns. */
+.hero.hero-bright{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:center;gap:30px;background:radial-gradient(ellipse at 82% 45%,#354653 0%,#25323e 40%,#18232e 78%);padding:0 5%;min-height:620px;border-bottom-color:#40505d}
+.hero-bright:after{display:none}
+.hero-bright .wrap{order:1;width:auto;max-width:none;margin:0;padding:48px 0 60px;min-width:0}
+.hero-bright .hero-copy{width:100%;max-width:none}
+.hero-product-image{position:relative;order:2;inset:auto;z-index:0;width:100%;height:auto;max-height:none;aspect-ratio:3/2;object-fit:contain;align-self:center;border-radius:18px;box-shadow:0 20px 50px #080f172e}
+.hero-bright h1{font-size:clamp(38px,3.55vw,58px);line-height:1.08}
+.hero-bright p{color:#eef2f5}
+.hero-bright .hero-blue{color:#43cbff}.hero-bright .hero-pink{color:#ff56b3}
+.hero-bright .eyebrow{color:#edf2f6}
+.hero-service{background:#344453;color:#fff;border-color:#617181;box-shadow:0 5px 12px #0a11181a}
+.hero-service:hover{background:#405365}
+.hero-bright .btn.secondary{background:#30414f;border-color:#c7d3dd;color:#fff}
+.hero-bright .btn.secondary:hover{background:#405768}
+.hero-bright .hero-note{background:#17232ed9;color:#e2eaf0;font-size:10px}
+@media(min-width:1600px){.hero.hero-bright{padding-inline:max(5%,calc((100vw - 1500px)/2))}}
+@media(min-width:801px) and (max-width:1100px){.hero.hero-bright{gap:24px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.hero-services{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.hero-bright h1{font-size:38px}.hero-bright .actions{gap:10px}.hero-bright .btn{font-size:13px}}
+@media(max-width:800px){.hero.hero-bright{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:0 5% 38px;min-height:0}.hero-bright .wrap{padding:36px 0 26px}.hero-bright h1{font-size:clamp(36px,6vw,48px)}.hero-product-image{width:100%;height:auto;max-height:none;align-self:center}.hero-bright .hero-note{left:5%;right:5%;bottom:8px;text-align:center;font-size:9px}}
+@media(max-width:500px){.hero-bright h1{font-size:36px}.hero-bright .eyebrow{font-size:9px;letter-spacing:1px}.hero-bright .hero-note{font-size:8px}.hero-service{font-size:11px}}

@@ -33,3 +33,17 @@ test('contact requires three simple fields and preserves Unicode and newlines in
   assert.equal(form.elements.name.value,'Asjad');dom.window.close();
 });
 test('mobile menu exposes state and Escape closes it',async()=>{const dom=await render('index.html');const menu=document.querySelector('.menu');menu.click();assert.equal(menu.getAttribute('aria-expanded'),'true');document.dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Escape'}));assert.equal(menu.getAttribute('aria-expanded'),'false');dom.window.close();});
+
+test('old API service names upgrade to Standee and Custom Label on cards and enquiries',async()=>{
+  const old=catalogue.services;
+  catalogue.services=old.map(s=>s.id==='poster'?{...s,name:'Poster Printing'}:s.id==='merchandise'?{...s,name:'Custom Merchandise Printing'}:s);
+  try{
+    let dom=await render('services.html');
+    const titles=[...document.querySelectorAll('#catalogue h3')].map(e=>e.textContent);
+    assert.ok(titles.includes('Standee Printing'));assert.ok(titles.includes('Custom Label Printing'));assert.ok(!titles.includes('Poster Printing'));
+    dom.window.close();
+    dom=await render('get-a-quote.html','?service=poster');
+    assert.equal(document.querySelector('select[name=service]').selectedOptions[0].textContent,'Standee Printing');
+    dom.window.close();
+  }finally{catalogue.services=old;}
+});
