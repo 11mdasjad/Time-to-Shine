@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /
+# Development site. Run scripts/prepare-seo.js after domain and business approval.

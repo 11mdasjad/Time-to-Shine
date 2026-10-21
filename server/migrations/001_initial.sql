@@ -1,0 +1,18 @@
+BEGIN;
+CREATE TABLE IF NOT EXISTS roles(id smallserial PRIMARY KEY,name text UNIQUE NOT NULL);
+INSERT INTO roles(name) VALUES ('admin') ON CONFLICT DO NOTHING;
+CREATE TABLE IF NOT EXISTS users(id uuid PRIMARY KEY,email text UNIQUE NOT NULL,password_hash text NOT NULL,role_id smallint REFERENCES roles(id),created_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS service_categories(id text PRIMARY KEY,name text NOT NULL);
+CREATE TABLE IF NOT EXISTS services(id text PRIMARY KEY,category_id text REFERENCES service_categories(id),name text NOT NULL,content jsonb NOT NULL,status text NOT NULL CHECK(status IN ('proposed','available','archived')),created_at timestamptz DEFAULT now());
+CREATE TABLE IF NOT EXISTS service_images(id uuid PRIMARY KEY,service_id text REFERENCES services(id),path text NOT NULL,alt text NOT NULL);
+CREATE TABLE IF NOT EXISTS quotation_requests(id uuid PRIMARY KEY,reference text UNIQUE NOT NULL,kind text NOT NULL CHECK(kind IN ('quote','enquiry','artwork')),customer jsonb NOT NULL,requirements jsonb NOT NULL,artwork jsonb,status text NOT NULL DEFAULT 'New' CHECK(status IN ('New','Under Review','Additional Information Required','Quote Prepared','Quote Sent','Accepted','Rejected','Completed')),notes text NOT NULL DEFAULT '',created_at timestamptz NOT NULL DEFAULT now(),updated_at timestamptz NOT NULL DEFAULT now());
+CREATE INDEX IF NOT EXISTS quotation_status_created ON quotation_requests(status,created_at DESC);
+CREATE TABLE IF NOT EXISTS quotation_items(id uuid PRIMARY KEY,quotation_id uuid REFERENCES quotation_requests(id),service_id text REFERENCES services(id),quantity integer CHECK(quantity>0),specifications jsonb NOT NULL);
+CREATE TABLE IF NOT EXISTS artwork_files(id uuid PRIMARY KEY,quotation_id uuid REFERENCES quotation_requests(id),storage_key text UNIQUE NOT NULL,mime_type text NOT NULL,size_bytes bigint CHECK(size_bytes>0),created_at timestamptz DEFAULT now());
+CREATE TABLE IF NOT EXISTS customer_enquiries(id uuid PRIMARY KEY,request_id uuid REFERENCES quotation_requests(id),created_at timestamptz DEFAULT now());
+CREATE TABLE IF NOT EXISTS portfolio_projects(id uuid PRIMARY KEY,title text NOT NULL,image_path text NOT NULL,illustrative boolean NOT NULL DEFAULT true,archived boolean NOT NULL DEFAULT false);
+CREATE TABLE IF NOT EXISTS faqs(id uuid PRIMARY KEY,question text NOT NULL,answer text NOT NULL,sort_order integer DEFAULT 0);
+CREATE TABLE IF NOT EXISTS site_settings(key text PRIMARY KEY,value jsonb NOT NULL,updated_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS admin_audit_logs(id bigserial PRIMARY KEY,action text NOT NULL,target text NOT NULL,created_at timestamptz NOT NULL DEFAULT now());
+REVOKE ALL ON ALL TABLES IN SCHEMA public FROM PUBLIC;
+COMMIT;

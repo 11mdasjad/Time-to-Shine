@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {validateSubmission,validateCatalogue} from '../server/validation.js';
+import {validateFile} from '../public/js/file-upload.js';
+import {services,faqs} from '../public/js/data.js';
+const data={name:'Test Person',phone:'+91 9999777681',email:'test@example.com',consent:'yes',service:'dtf',quantity:'5'};
+test('quote accepts valid enquiry and rejects missing consent and invalid quantity',()=>{assert.equal(validateSubmission(data,'quote'),null);for(const change of [{consent:''},{quantity:'-3'},{quantity:'1.2'},{quantity:'10000001'},{email:'bad'},{phone:'abc'},{name:''}])assert.ok(validateSubmission({...data,...change},'quote'));});
+test('oversized fields and malformed data rejected',()=>{assert.ok(validateSubmission({...data,requirements:'x'.repeat(5001)},'quote'));assert.ok(validateSubmission(null,'quote'));assert.ok(validateSubmission({...data,name:{}},'quote'));});
+test('catalogue rejects script URLs, duplicate IDs and invalid status',()=>{const c={services,faqs,portfolio:[],settings:{}};assert.equal(validateCatalogue(c),true);for(const change of [{url:'javascript:alert(1)'},{image:'https://example.com/x.svg'},{status:'live'}])assert.equal(validateCatalogue({...c,services:[{...services[0],...change}]}),false);assert.equal(validateCatalogue({...c,services:[services[0],services[0]]}),false);});
+test('client artwork checks reject oversize and unsupported files',()=>{assert.equal(validateFile({name:'art.png',size:100,type:'image/png'}),'');assert.ok(validateFile({name:'art.svg',size:100,type:'image/svg+xml'}));assert.ok(validateFile({name:'art.pdf',size:11*1024*1024,type:'application/pdf'}));});
