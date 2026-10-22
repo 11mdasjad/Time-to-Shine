@@ -109,3 +109,31 @@ label{font-size:14px}
 .service-enquiry-panel{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;background:#f3f8fc;border:1px solid #dce8ef;border-radius:16px;padding:28px;margin-bottom:32px}.service-enquiry-panel h2{font-size:26px;margin-bottom:10px}.service-enquiry-panel p{margin:0;font-size:14px;color:var(--muted)}.service-enquiry-panel .eyebrow{color:#0873a0}.service-enquiry-controls{min-width:0}.service-enquiry-controls label{margin-bottom:12px}.service-enquiry-controls select{width:100%}.service-enquiry-controls .btn{width:100%}select[name="service"],#enquiry-service{font-size:14px;text-overflow:ellipsis}@media(max-width:768px){.service-enquiry-panel{grid-template-columns:1fr;gap:20px;padding:22px}.service-enquiry-panel h2{font-size:23px}}
 .card .product-art img[src="/assets/aadhaar-printing.png"]{object-fit:cover;object-position:50% 55%;transform:none}
 .detail-image[src="/assets/aadhaar-printing.png"]{height:auto;aspect-ratio:3/2}
+
+/* Services collection: classic editorial banner. */
+.collection-hero{background:#f5f1e9;color:#192d2b;overflow:hidden;border-bottom:1px solid #dcd5c7;padding:24px 0 0}
+.collection-hero .breadcrumb{display:flex;gap:13px;margin:0 0 28px;color:#676b61;font-size:12px}
+.collection-layout{display:grid;grid-template-columns:1fr 1.12fr;align-items:center;gap:55px;padding:12px 0 44px}
+.collection-copy .eyebrow{color:#78603b;letter-spacing:2.7px;font-size:10px;margin-bottom:24px;display:flex;align-items:center;gap:12px}
+.collection-copy .eyebrow span{font-size:19px}
+.collection-copy h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(46px,5.3vw,76px);font-weight:400;line-height:1.02;letter-spacing:-3px;margin-bottom:23px}
+.collection-copy h1 em{color:#97743f;font-weight:400}
+.collection-copy p{color:#62685f;font-size:15px;line-height:1.8;margin-bottom:25px}
+.collection-copy .actions{align-items:center;gap:24px}
+.collection-primary{background:#203c36;border-radius:3px;padding:15px 21px}
+.collection-primary:hover{background:#325449}
+.collection-link{font-size:12px;font-weight:700;border-bottom:1px solid #a39882;padding:8px 0;display:flex;gap:13px}
+.collection-signature{display:flex;align-items:center;gap:12px;font-size:8px;letter-spacing:2px;color:#746b59;margin-top:32px}
+.collection-signature>span{width:34px;height:1px;background:#ac9268}
+.collection-visual{margin:0;position:relative;min-width:0;padding:15px 14px 0 0}
+.collection-image-frame{position:relative;background:#fff;border:1px solid #e0d9ca;box-shadow:12px 12px 0 #e9e3d7;padding:12px;transform:rotate(-2deg)}
+.collection-image-frame img{width:100%;height:auto;aspect-ratio:1.22;object-fit:cover}
+.collection-seal{position:absolute;right:-9px;top:-17px;display:flex;flex-direction:column;align-items:center;justify-content:center;width:94px;height:94px;border-radius:50%;background:#203c36;color:#f2dfb6;border:5px double #ae986d;transform:rotate(12deg);box-shadow:0 4px 12px #192d2b18}
+.collection-seal span{font-size:8px;letter-spacing:1.3px}.collection-seal b{font-size:28px;line-height:1.25;font-weight:400}
+.collection-visual figcaption{display:flex;justify-content:space-between;gap:12px;font-size:8px;letter-spacing:1.2px;color:#746b59;margin-top:25px}
+.collection-visual figcaption span:last-child{letter-spacing:0;font-size:10px}
+.collection-categories{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid #d8cfbe;padding:19px 0;font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:#575e51}
+.collection-categories i{font-size:13px;font-style:normal;color:#a08658}
+#print-services{scroll-margin-top:105px}
+@media(max-width:1000px){.collection-layout{gap:30px}.collection-copy h1{font-size:58px}.collection-copy .actions{gap:14px}.collection-visual figcaption{flex-direction:column;gap:3px}.collection-categories{letter-spacing:1px;font-size:9px}}
+@media(max-width:700px){.collection-hero{padding-top:20px}.collection-hero .breadcrumb{margin-bottom:15px}.collection-layout{grid-template-columns:1fr;gap:38px;padding-bottom:30px}.collection-copy h1{font-size:clamp(48px,10vw,64px);letter-spacing:-2px}.collection-copy .eyebrow{margin-bottom:18px}.collection-signature{margin-top:23px}.collection-visual{margin:0 8px;padding-right:10px}.collection-image-frame img{aspect-ratio:1.5}.collection-visual figcaption{flex-direction:row;flex-wrap:wrap;margin-top:23px}.collection-seal{width:78px;height:78px;right:-8px;top:-20px}.collection-seal span{font-size:6px}.collection-categories{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px 0}.collection-categories i{display:none}}
